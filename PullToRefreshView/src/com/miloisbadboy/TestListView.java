@@ -10,7 +10,7 @@ import com.miloisbadboy.view.PullToRefreshView;
 import com.miloisbadboy.view.PullToRefreshView.OnFooterRefreshListener;
 import com.miloisbadboy.view.PullToRefreshView.OnHeaderRefreshListener;
 /**
- * ÊµÏÖOnHeaderRefreshListener,OnFooterRefreshListenerÁ½¸ö½Ó¿Ú
+ * å®ç°OnHeaderRefreshListener,OnFooterRefreshListeneræ¥å£
  * @author Administrator
  *
  */
@@ -49,8 +49,8 @@ public class TestListView extends ListActivity implements OnHeaderRefreshListene
 			
 			@Override
 			public void run() {
-				//¿ÉÒÔÉèÖÃ¸üĞÂÊ±¼ä
-				//mPullToRefreshView.onHeaderRefreshComplete("×î½ü¸üĞÂ:01-23 12:01");
+				//è®¾ç½®æ›´æ–°æ—¶é—´
+				//mPullToRefreshView.onHeaderRefreshComplete("æœ€è¿‘æ›´æ–°:01-23 12:01");
 				mPullToRefreshView.onHeaderRefreshComplete();
 			}
 		},1000);

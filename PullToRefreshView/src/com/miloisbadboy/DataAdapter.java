@@ -31,15 +31,8 @@ public class DataAdapter extends BaseAdapter{
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if(convertView == null){
-				TextView textView = new TextView(mContext);
-				AbsListView.LayoutParams params = new AbsListView.LayoutParams(LayoutParams.WRAP_CONTENT, 80);
-				textView.setTextSize(20);
-				textView.setLayoutParams(params);
-				
-				textView.setText("test");
-				convertView = textView;
+				convertView = View.inflate(mContext, R.layout.grid_item, null);		
 			}
 			return convertView;
 		}
-		
 	}

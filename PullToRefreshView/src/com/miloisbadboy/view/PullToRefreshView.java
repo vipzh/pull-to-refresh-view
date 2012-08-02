@@ -128,6 +128,7 @@ public class PullToRefreshView extends LinearLayout {
 	 * last update time
 	 */
 	private String mLastUpdateTime;
+
 	public PullToRefreshView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		init();
@@ -147,13 +148,15 @@ public class PullToRefreshView extends LinearLayout {
 	 */
 	private void init() {
 		// Load all of the animations we need in code rather than through XML
-		mFlipAnimation = new RotateAnimation(0, -180, RotateAnimation.RELATIVE_TO_SELF, 0.5f,
+		mFlipAnimation = new RotateAnimation(0, -180,
+				RotateAnimation.RELATIVE_TO_SELF, 0.5f,
 				RotateAnimation.RELATIVE_TO_SELF, 0.5f);
 		mFlipAnimation.setInterpolator(new LinearInterpolator());
 		mFlipAnimation.setDuration(250);
 		mFlipAnimation.setFillAfter(true);
-		mReverseFlipAnimation = new RotateAnimation(-180, 0, RotateAnimation.RELATIVE_TO_SELF,
-				0.5f, RotateAnimation.RELATIVE_TO_SELF, 0.5f);
+		mReverseFlipAnimation = new RotateAnimation(-180, 0,
+				RotateAnimation.RELATIVE_TO_SELF, 0.5f,
+				RotateAnimation.RELATIVE_TO_SELF, 0.5f);
 		mReverseFlipAnimation.setInterpolator(new LinearInterpolator());
 		mReverseFlipAnimation.setDuration(250);
 		mReverseFlipAnimation.setFillAfter(true);
@@ -167,15 +170,19 @@ public class PullToRefreshView extends LinearLayout {
 		// header view
 		mHeaderView = mInflater.inflate(R.layout.refresh_header, this, false);
 
-		mHeaderImageView = (ImageView) mHeaderView.findViewById(R.id.pull_to_refresh_image);
-		mHeaderTextView = (TextView) mHeaderView.findViewById(R.id.pull_to_refresh_text);
+		mHeaderImageView = (ImageView) mHeaderView
+				.findViewById(R.id.pull_to_refresh_image);
+		mHeaderTextView = (TextView) mHeaderView
+				.findViewById(R.id.pull_to_refresh_text);
 		mHeaderUpdateTextView = (TextView) mHeaderView
 				.findViewById(R.id.pull_to_refresh_updated_at);
-		mHeaderProgressBar = (ProgressBar) mHeaderView.findViewById(R.id.pull_to_refresh_progress);
+		mHeaderProgressBar = (ProgressBar) mHeaderView
+				.findViewById(R.id.pull_to_refresh_progress);
 		// header layout
 		measureView(mHeaderView);
 		mHeaderViewHeight = mHeaderView.getMeasuredHeight();
-		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, mHeaderViewHeight);
+		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT,
+				mHeaderViewHeight);
 		// 设置topMargin的值为负的header View高度,即将其隐藏在最上方
 		params.topMargin = -(mHeaderViewHeight);
 		// mHeaderView.setLayoutParams(params1);
@@ -186,15 +193,20 @@ public class PullToRefreshView extends LinearLayout {
 	private void addFooterView() {
 		// footer view
 		mFooterView = mInflater.inflate(R.layout.refresh_footer, this, false);
-		mFooterImageView = (ImageView) mFooterView.findViewById(R.id.pull_to_load_image);
-		mFooterTextView = (TextView) mFooterView.findViewById(R.id.pull_to_load_text);
-		mFooterProgressBar = (ProgressBar) mFooterView.findViewById(R.id.pull_to_load_progress);
+		mFooterImageView = (ImageView) mFooterView
+				.findViewById(R.id.pull_to_load_image);
+		mFooterTextView = (TextView) mFooterView
+				.findViewById(R.id.pull_to_load_text);
+		mFooterProgressBar = (ProgressBar) mFooterView
+				.findViewById(R.id.pull_to_load_progress);
 		// footer layout
 		measureView(mFooterView);
 		mFooterViewHeight = mFooterView.getMeasuredHeight();
-		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, mFooterViewHeight);
-		//int top = getHeight();
-		//params.topMargin =getHeight();//在这里getHeight()==0,但在onInterceptTouchEvent()方法里getHeight()已经有值了,不再是0;
+		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT,
+				mFooterViewHeight);
+		// int top = getHeight();
+		// params.topMargin
+		// =getHeight();//在这里getHeight()==0,但在onInterceptTouchEvent()方法里getHeight()已经有值了,不再是0;
 		// getHeight()什么时候会赋值,稍候再研究一下
 		// 由于是线性布局可以直接添加,只要AdapterView的高度是MATCH_PARENT,那么footer view就会被添加到最后,并隐藏
 		addView(mFooterView, params);
@@ -220,21 +232,22 @@ public class PullToRefreshView extends LinearLayout {
 					"this layout must contain 3 child views,and AdapterView or ScrollView must in the second position!");
 		}
 		View view = null;
-		for(int i=0;i<count-1;++i){
+		for (int i = 0; i < count - 1; ++i) {
 			view = getChildAt(i);
 			if (view instanceof AdapterView<?>) {
 				mAdapterView = (AdapterView<?>) view;
 			}
 			if (view instanceof ScrollView) {
 				// finish later
-				mScrollView = (ScrollView)view;
+				mScrollView = (ScrollView) view;
 			}
 		}
-		if (mAdapterView == null && mScrollView==null) {
-			throw new IllegalArgumentException("must contain a AdapterView or ScrollView in this layout!");
+		if (mAdapterView == null && mScrollView == null) {
+			throw new IllegalArgumentException(
+					"must contain a AdapterView or ScrollView in this layout!");
 		}
 	}
-	
+
 	private void measureView(View child) {
 		ViewGroup.LayoutParams p = child.getLayoutParams();
 		if (p == null) {
@@ -246,9 +259,11 @@ public class PullToRefreshView extends LinearLayout {
 		int lpHeight = p.height;
 		int childHeightSpec;
 		if (lpHeight > 0) {
-			childHeightSpec = MeasureSpec.makeMeasureSpec(lpHeight, MeasureSpec.EXACTLY);
+			childHeightSpec = MeasureSpec.makeMeasureSpec(lpHeight,
+					MeasureSpec.EXACTLY);
 		} else {
-			childHeightSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
+			childHeightSpec = MeasureSpec.makeMeasureSpec(0,
+					MeasureSpec.UNSPECIFIED);
 		}
 		child.measure(childWidthSpec, childHeightSpec);
 	}
@@ -316,7 +331,8 @@ public class PullToRefreshView extends LinearLayout {
 					setHeaderTopMargin(-mHeaderViewHeight);
 				}
 			} else if (mPullState == PULL_UP_STATE) {
-				if(Math.abs(topMargin)>=mHeaderViewHeight+mFooterViewHeight){
+				if (Math.abs(topMargin) >= mHeaderViewHeight
+						+ mFooterViewHeight) {
 					// 开始执行footer 刷新
 					footerRefreshing();
 				} else {
@@ -340,43 +356,56 @@ public class PullToRefreshView extends LinearLayout {
 		if (mHeaderState == REFRESHING || mFooterState == REFRESHING) {
 			return false;
 		}
-		//对于ListView 以及GridView
+		//对于ListView和GridView
 		if (mAdapterView != null) {
-			View child = mAdapterView.getChildAt(0);
-			if (child == null) {
-				// 如果mAdapterView中没有数据,不拦截
-				// 可以考虑返回true
-				return false;
-			}
 			// 子view(ListView or GridView)滑动到最顶端
-			int top = child.getTop();//listview child.getTop=0,而gridview child.getTop=8
-			int post = mAdapterView.getFirstVisiblePosition();
-			int padding = mAdapterView.getPaddingTop();
-			if (deltaY > 0 && child.getTop() == 0) {
-				mPullState = PULL_DOWN_STATE;
-				return true;
+			if (deltaY > 0) {
+
+				View child = mAdapterView.getChildAt(0);
+				if (child == null) {
+					// 如果mAdapterView中没有数据,不拦截
+					return false;
+				}
+				if (mAdapterView.getFirstVisiblePosition() == 0
+						&& child.getTop() == 0) {
+					mPullState = PULL_DOWN_STATE;
+					return true;
+				}
+				int top = child.getTop();
+				int padding = mAdapterView.getPaddingTop();
+				if (mAdapterView.getFirstVisiblePosition() == 0
+						&& Math.abs(top - padding) <= 8) {//这里之前用3可以判断,但现在不行,还没找到原因
+					mPullState = PULL_DOWN_STATE;
+					return true;
+				}
+
 			} else if (deltaY < 0) {
-				View lastChild = mAdapterView.getChildAt(mAdapterView.getChildCount() - 1);
+				View lastChild = mAdapterView.getChildAt(mAdapterView
+						.getChildCount() - 1);
 				if (lastChild == null) {
 					// 如果mAdapterView中没有数据,不拦截
 					return false;
 				}
 				// 最后一个子view的Bottom小于父View的高度说明mAdapterView的数据没有填满父view,
 				// 等于父View的高度说明mAdapterView已经滑动到最后
-				if (lastChild.getBottom() <= getHeight()) {
+				if (lastChild.getBottom() <= getHeight()
+						&& mAdapterView.getLastVisiblePosition() == mAdapterView
+								.getCount() - 1) {
 					mPullState = PULL_UP_STATE;
 					return true;
 				}
 			}
 		}
-		//对于ScrollView
-		if(mScrollView!=null){
+		// 对于ScrollView
+		if (mScrollView != null) {
 			// 子scroll view滑动到最顶端
 			View child = mScrollView.getChildAt(0);
 			if (deltaY > 0 && mScrollView.getScrollY() == 0) {
 				mPullState = PULL_DOWN_STATE;
 				return true;
-			} else if (deltaY < 0 && child.getMeasuredHeight()<=getHeight()+mScrollView.getScrollY()) {
+			} else if (deltaY < 0
+					&& child.getMeasuredHeight() <= getHeight()
+							+ mScrollView.getScrollY()) {
 				mPullState = PULL_UP_STATE;
 				return true;
 			}
@@ -399,10 +428,10 @@ public class PullToRefreshView extends LinearLayout {
 			mHeaderImageView.clearAnimation();
 			mHeaderImageView.startAnimation(mFlipAnimation);
 			mHeaderState = RELEASE_TO_REFRESH;
-		}else if(newTopMargin<0&&newTopMargin>-mHeaderViewHeight) {//拖动时没有释放
+		} else if (newTopMargin < 0 && newTopMargin > -mHeaderViewHeight) {// 拖动时没有释放
 			mHeaderImageView.clearAnimation();
 			mHeaderImageView.startAnimation(mFlipAnimation);
-			//mHeaderImageView.
+			// mHeaderImageView.
 			mHeaderTextView.setText(R.string.pull_to_refresh_pull_label);
 			mHeaderState = PULL_TO_REFRESH;
 		}
@@ -417,29 +446,31 @@ public class PullToRefreshView extends LinearLayout {
 	 */
 	private void footerPrepareToRefresh(int deltaY) {
 		int newTopMargin = changingHeaderViewTopMargin(deltaY);
-		//如果header view topMargin 的绝对值大于或等于header + footer 的高度
-		//说明footer view 完全显示出来了，修改footer view 的提示状态
-		if(Math.abs(newTopMargin)>=(mHeaderViewHeight+mFooterViewHeight)
-				&& mFooterState != RELEASE_TO_REFRESH){
-			mFooterTextView.setText(R.string.pull_to_refresh_footer_release_label);
+		// 如果header view topMargin 的绝对值大于或等于header + footer 的高度
+		// 说明footer view 完全显示出来了，修改footer view 的提示状态
+		if (Math.abs(newTopMargin) >= (mHeaderViewHeight + mFooterViewHeight)
+				&& mFooterState != RELEASE_TO_REFRESH) {
+			mFooterTextView
+					.setText(R.string.pull_to_refresh_footer_release_label);
 			mFooterImageView.clearAnimation();
 			mFooterImageView.startAnimation(mFlipAnimation);
 			mFooterState = RELEASE_TO_REFRESH;
-		}else if(Math.abs(newTopMargin)<(mHeaderViewHeight+mFooterViewHeight)){
+		} else if (Math.abs(newTopMargin) < (mHeaderViewHeight + mFooterViewHeight)) {
 			mFooterImageView.clearAnimation();
 			mFooterImageView.startAnimation(mFlipAnimation);
 			mFooterTextView.setText(R.string.pull_to_refresh_footer_pull_label);
 			mFooterState = PULL_TO_REFRESH;
 		}
 	}
+
 	/**
 	 * 修改Header view top margin的值
-	 * @description 	
+	 * 
+	 * @description
 	 * @param deltaY
-	 * @return
-	 * hylin  2012-7-31下午1:14:31
+	 * @return hylin 2012-7-31下午1:14:31
 	 */
-	private int changingHeaderViewTopMargin(int deltaY){
+	private int changingHeaderViewTopMargin(int deltaY) {
 		LayoutParams params = (LayoutParams) mHeaderView.getLayoutParams();
 		float newTopMargin = params.topMargin + deltaY * 0.3f;
 		params.topMargin = (int) newTopMargin;
@@ -447,6 +478,7 @@ public class PullToRefreshView extends LinearLayout {
 		invalidate();
 		return params.topMargin;
 	}
+
 	/**
 	 * header refreshing
 	 * 
@@ -478,7 +510,8 @@ public class PullToRefreshView extends LinearLayout {
 		mFooterImageView.clearAnimation();
 		mFooterImageView.setImageDrawable(null);
 		mFooterProgressBar.setVisibility(View.VISIBLE);
-		mFooterTextView.setText(R.string.pull_to_refresh_footer_refreshing_label);
+		mFooterTextView
+				.setText(R.string.pull_to_refresh_footer_refreshing_label);
 		if (mOnFooterRefreshListener != null) {
 			mOnFooterRefreshListener.onFooterRefresh(this);
 		}
@@ -513,14 +546,18 @@ public class PullToRefreshView extends LinearLayout {
 		// mHeaderUpdateTextView.setText("");
 		mHeaderState = PULL_TO_REFRESH;
 	}
+
 	/**
-     * Resets the list to a normal state after a refresh.
-     * @param lastUpdated Last updated at.
-     */
-    public void onHeaderRefreshComplete(CharSequence lastUpdated) {
-        setLastUpdated(lastUpdated);
-        onHeaderRefreshComplete();
-    }
+	 * Resets the list to a normal state after a refresh.
+	 * 
+	 * @param lastUpdated
+	 *            Last updated at.
+	 */
+	public void onHeaderRefreshComplete(CharSequence lastUpdated) {
+		setLastUpdated(lastUpdated);
+		onHeaderRefreshComplete();
+	}
+
 	/**
 	 * footer view 完成更新后恢复初始状态
 	 */
@@ -533,18 +570,22 @@ public class PullToRefreshView extends LinearLayout {
 		// mHeaderUpdateTextView.setText("");
 		mFooterState = PULL_TO_REFRESH;
 	}
+
 	/**
-     * Set a text to represent when the list was last updated. 
-     * @param lastUpdated Last updated at.
-     */
-    public void setLastUpdated(CharSequence lastUpdated) {
-        if (lastUpdated != null) {
-            mHeaderUpdateTextView.setVisibility(View.VISIBLE);
-            mHeaderUpdateTextView.setText(lastUpdated);
-        } else {
-        	mHeaderUpdateTextView.setVisibility(View.GONE);
-        }
-    }
+	 * Set a text to represent when the list was last updated.
+	 * 
+	 * @param lastUpdated
+	 *            Last updated at.
+	 */
+	public void setLastUpdated(CharSequence lastUpdated) {
+		if (lastUpdated != null) {
+			mHeaderUpdateTextView.setVisibility(View.VISIBLE);
+			mHeaderUpdateTextView.setText(lastUpdated);
+		} else {
+			mHeaderUpdateTextView.setVisibility(View.GONE);
+		}
+	}
+
 	/**
 	 * 获取当前header view 的topMargin
 	 * 
@@ -581,11 +622,13 @@ public class PullToRefreshView extends LinearLayout {
 	 * @param headerRefreshListener
 	 *            hylin 2012-7-31上午11:43:58
 	 */
-	public void setOnHeaderRefreshListener(OnHeaderRefreshListener headerRefreshListener) {
+	public void setOnHeaderRefreshListener(
+			OnHeaderRefreshListener headerRefreshListener) {
 		mOnHeaderRefreshListener = headerRefreshListener;
 	}
 
-	public void setOnFooterRefreshListener(OnFooterRefreshListener footerRefreshListener) {
+	public void setOnFooterRefreshListener(
+			OnFooterRefreshListener footerRefreshListener) {
 		mOnFooterRefreshListener = footerRefreshListener;
 	}
 
