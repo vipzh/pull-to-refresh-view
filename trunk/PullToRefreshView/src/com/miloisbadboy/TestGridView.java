@@ -38,8 +38,8 @@ public class TestGridView extends Activity implements OnHeaderRefreshListener,On
 			
 			@Override
 			public void run() {
-				//¿ÉÒÔÉèÖÃ¸üĞÂÊ±¼ä
-				//mPullToRefreshView.onHeaderRefreshComplete("×î½ü¸üĞÂ:01-23 12:01");
+				// è®¾ç½®æ›´æ–°æ—¶é—´
+				//mPullToRefreshView.onHeaderRefreshComplete("æœ€è¿‘æ›´æ–°:01-23 12:01");
 				mPullToRefreshView.onHeaderRefreshComplete();
 			}
 		},1000);
