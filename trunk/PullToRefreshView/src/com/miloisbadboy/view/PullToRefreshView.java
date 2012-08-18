@@ -473,6 +473,15 @@ public class PullToRefreshView extends LinearLayout {
 	private int changingHeaderViewTopMargin(int deltaY) {
 		LayoutParams params = (LayoutParams) mHeaderView.getLayoutParams();
 		float newTopMargin = params.topMargin + deltaY * 0.3f;
+		//这里对上拉做一下限制,因为当前上拉后然后不释放手指直接下拉,会把下拉刷新给触发了,感谢网友yufengzungzhe的指出
+		//表示如果是在上拉后一段距离,然后直接下拉
+		if(deltaY>0&&mPullState == PULL_UP_STATE&&Math.abs(params.topMargin) <= mHeaderViewHeight){
+			return params.topMargin;
+		}
+		//同样地,对下拉做一下限制,避免出现跟上拉操作时一样的bug
+		if(deltaY<0&&mPullState == PULL_DOWN_STATE&&Math.abs(params.topMargin)>=mHeaderViewHeight){
+			return params.topMargin;
+		}
 		params.topMargin = (int) newTopMargin;
 		mHeaderView.setLayoutParams(params);
 		invalidate();
